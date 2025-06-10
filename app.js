@@ -145,8 +145,8 @@ app.get("/registerurl", (req, resp) => {
           {
             ShortCode: "174379",
             ResponseType: "Completed",
-            ConfirmationURL: "https://69e4-102-0-11-18.ngrok-free.app/confirmation",
-            ValidationURL: "https://69e4-102-0-11-18.ngrok-free.app/validation",
+            ConfirmationURL: "https://2bbb-197-248-144-15.ngrok-free.app/confirmation",
+            ValidationURL: "https://2bbb-197-248-144-15.ngrok-free.app/validation",
           },
           {
             headers: {
@@ -176,31 +176,33 @@ app.get("/validation", (req, resp) => {
 });
 
 // B2C ROUTE OR AUTO WITHDRAWAL
-app.get("/b2curlrequest", (req, res) => {
+app.post("/b2curlrequest", (req, res) => {
   getAccessToken()
     .then((accessToken) => {
       const securityCredential =
-        "N3Lx/hisedzPLxhDMDx80IcioaSO7eaFuMC52Uts4ixvQ/Fhg5LFVWJ3FhamKur/bmbFDHiUJ2KwqVeOlSClDK4nCbRIfrqJ+jQZsWqrXcMd0o3B2ehRIBxExNL9rqouKUKuYyKtTEEKggWPgg81oPhxQ8qTSDMROLoDhiVCKR6y77lnHZ0NU83KRU4xNPy0hRcGsITxzRWPz3Ag+qu/j7SVQ0s3FM5KqHdN2UnqJjX7c0rHhGZGsNuqqQFnoHrshp34ac/u/bWmrApUwL3sdP7rOrb0nWasP7wRSCP6mAmWAJ43qWeeocqrz68TlPDIlkPYAT5d9QlHJbHHKsa1NA==";
-      const url = "https://sandbox.safaricom.co.ke/mpesa/b2c/v1/paymentrequest";
+      "jyMyPJ/TdYQmBVbge0iI2Pgx6zsmr/ahxqkGuEHRxOb/Le+7KEE6tu5xfek6FfM9xrhkWFrLpxqxilXyre2QUOkkuGYGvslP734lpidtEfLrVANDnFoGmhvl0DNggdeRLtUrxf5mMX1R0Cm3GnoGzBTDKC7X7QAD7vFEVaezYdZzJdN8MHBr+cS59Sr354hodVQVRpz420b+2b9igI4jBAUwWilums2Mb8YMMkds+9FQH79hsvMuZX5kwU4D5ImSrxicKmHJDxhtmMmb22rHUDd4NrBYsQhh7ls2Zkiuh3XcOYvI8KYBI3RoKZPDPLM5StPZsqhPt8dQ/1p7ExbiEg=="
+      const url = "https://sandbox.safaricom.co.ke/mpesa/b2c/v3/paymentrequest";
       const auth = "Bearer " + accessToken;
       axios
         .post(
           url,
           {
+            OriginatorConversationID: "52a9d5cc-eae6-4141-b8b5-c41ce36d8b9c", // Unique ID for the transaction always change it and restart the server
             InitiatorName: "testapi",
             SecurityCredential: securityCredential,
             CommandID: "PromotionPayment",
-            Amount: "1",
-            PartyA: "600996",
-            PartyB: "",//phone number to receive the stk push
+            Amount: "10",
+            PartyA: "600991",
+            PartyB: "254790163849",//phone number to receive the stk push
             Remarks: "Withdrawal",
-            QueueTimeOutURL: "https://mydomain.com/b2c/queue",
-            ResultURL: "https://mydomain.com/b2c/result",
+            QueueTimeOutURL: "https://2bbb-197-248-144-15.ngrok-free.app/b2c/queue",
+            ResultURL: "https://2bbb-197-248-144-15.ngrok-free.app/b2c/result",
             Occasion: "Withdrawal",
           },
           {
             headers: {
               Authorization: auth,
+              "Content-Type": "application/json",
             },
           }
         )
@@ -208,7 +210,7 @@ app.get("/b2curlrequest", (req, res) => {
           res.status(200).json(response.data);
         })
         .catch((error) => {
-          console.log(error);
+          console.log("Error response:", error.response?.data);
           res.status(500).send("❌ Request failed");
         });
     })

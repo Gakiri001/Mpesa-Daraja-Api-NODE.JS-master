@@ -21,17 +21,11 @@ router.get('/api/home', (req, res) => {
   console.log("This is a sample API route.");
 });
 
-router.get("/api/access_token", (req, res) => {
-  getAccessToken()
-    .then((accessToken) => {
-      res.json({ message: "😀 Your access token is " + accessToken });
-    })
-    .catch(console.log);
-});
+
 
 async function getAccessToken() {
-  const consumer_key = ""; // REPLACE IT WITH YOUR CONSUMER KEY
-  const consumer_secret = ""; // REPLACE IT WITH YOUR CONSUMER SECRET
+  const consumer_key = "gbsAqGI1naOFREA62UgeCmqoAwVka5Vyv2AaGeyOGKf2f0jo"; // REPLACE IT WITH YOUR CONSUMER KEY
+  const consumer_secret = "wyKm2BhAMKACzqN2zZ39KAGfP5zYCMhfVlrqZKZhCsGIIVi6CFDCyThcFgqUEAGs"; // REPLACE IT WITH YOUR CONSUMER SECRET
   const url =
     "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials";
 
@@ -51,6 +45,14 @@ async function getAccessToken() {
     throw error;
   }
 }
+
+router.get("/api/access_token", (req, res) => {
+  getAccessToken()
+    .then((accessToken) => {
+      res.json({ message: "😀 Your access token is " + accessToken });
+    })
+    .catch(console.log);
+});
 
 router.post('/api/stkpush', (req, res) => {
   let phoneNumber = req.body.phone;
