@@ -187,7 +187,7 @@ app.post("/b2curlrequest", (req, res) => {
         .post(
           url,
           {
-            OriginatorConversationID: "52a9d5cc-eae6-4141-b8b5-c41ce36d8b9c", // Unique ID for the transaction always change it and restart the server
+            OriginatorConversationID: "cf2b0265-8ee8-4abf-8351-10259a41c3a3", // Unique ID for the transaction always change it and restart the server
             InitiatorName: "testapi",
             SecurityCredential: securityCredential,
             CommandID: "PromotionPayment",
