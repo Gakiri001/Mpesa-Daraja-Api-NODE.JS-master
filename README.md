@@ -44,18 +44,17 @@ How to contact me
 
 1. Email: alvo967@gmail.com
 
-3. Facebook: Alvin Kiveu
+2. Facebook: Alvin Kiveu
 
-4. Instagram: Alvin_Kiveu
+3. Instagram: Alvin_Kiveu
 
-5. LinkedIn: Alvin Kiveu
+4. LinkedIn: Alvin Kiveu
 
-6. WhatsApp: +254 768 168 060
+5. WhatsApp: +254 768 168 060
 
-8. Phone: +254 768 168 060
+6. Phone: +254 768 168 060
 
-9. Website: https://umeskiasoftwares.com
-
+7. Website: https://umeskiasoftwares.com
 
 Support us with the one of following ways
 
@@ -66,6 +65,3 @@ Support us with the one of following ways
 3. Follow me on GitHub
 
 4. Tip me via Mpesa Till Number: 59 26 541
-
-
-

@@ -1,33 +1,15 @@
-/*
-  Author: Alvin Kiveu
-  Description: Mpesa Daraja API with Node JS
-  Date: 23/10/2023
-  Github Link: https://github.com/alvin-kiveu/Mpesa-Daraja-Api-NODE.JS.git
-  Website: www.umeskiasoftwares.com
-  Email: info@umeskiasoftwares.com
-  Phone: +254113015674
-  
-*/
-
 const express = require("express");
-const router = express.Router();
-const axios = require("axios");
-const fs = require("fs");
 const moment = require("moment");
-
-// Sample API route
-router.get("/api/home", (req, res) => {
-  res.json({ message: "This is a sample API route." });
-  console.log("This is a sample API route.");
-});
+// const { getAccessToken } = require("./app");
+const axios = require("axios");
+const router = express.Router();
 
 async function getAccessToken() {
   const consumer_key = "gbsAqGI1naOFREA62UgeCmqoAwVka5Vyv2AaGeyOGKf2f0jo"; // REPLACE IT WITH YOUR CONSUMER KEY
   const consumer_secret =
     "wyKm2BhAMKACzqN2zZ39KAGfP5zYCMhfVlrqZKZhCsGIIVi6CFDCyThcFgqUEAGs"; // REPLACE IT WITH YOUR CONSUMER SECRET
   const url =
-    "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials";
-
+    "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials";
   const auth =
     "Basic " +
     new Buffer.from(consumer_key + ":" + consumer_secret).toString("base64");
@@ -38,36 +20,39 @@ async function getAccessToken() {
         Authorization: auth,
       },
     });
-    const accessToken = response.data.access_token;
+
+    const dataresponse = response.data;
+    // console.log(data);
+    const accessToken = dataresponse.access_token;
     return accessToken;
   } catch (error) {
     throw error;
   }
 }
 
+//ACCESS TOKEN ROUTE
 router.get("/api/access_token", (req, res) => {
   getAccessToken()
     .then((accessToken) => {
-      res.json({ message: "😀 Your access token is " + accessToken });
+      res.send("😀 Your access token is " + accessToken);
     })
     .catch(console.log);
 });
 
+router.get("/api/home", (req, res) => {
+  res.json({ message: "This is a sample API route.2" });
+});
+
 router.post("/api/stkpush", (req, res) => {
-  let phoneNumber = req.body.phone;
-  const accountNumber = req.body.accountNumber;
+  const phoneNumber = req.body.phone;
   const amount = req.body.amount;
+  const accountNumber = req.body.accountNumber;
 
-  if (phoneNumber.startsWith("0")) {
-    phoneNumber = "254" + phoneNumber.slice(1);
-  }
+  console.log("Phone Number:", phoneNumber);
+  console.log("Amount:", amount);
+  console.log("Account Number:", accountNumber);
 
-  //ECHO  THE DATA THAT WE RECEIVED FROM THE CLIENT
-  // console.log("Phone Number:", phoneNumber);
-  // console.log("Account Number:", accountNumber);
-  // console.log("Amount:", amount);
-  // res.json({ message: 'This is a sample API route.' });
-
+  // Echo the received data
   getAccessToken()
     .then((accessToken) => {
       const url =
@@ -88,12 +73,11 @@ router.post("/api/stkpush", (req, res) => {
             Password: password,
             Timestamp: timestamp,
             TransactionType: "CustomerPayBillOnline",
-            Amount: amount,
-            PartyA: phoneNumber,
+            Amount: amount, //amount to be paid
+            PartyA: phoneNumber, //phone number to receive the stk push
             PartyB: "174379",
-            PhoneNumber: phoneNumber,
-            CallBackURL:
-              "https://249e-105-60-226-239.ngrok-free.app/api/callback",
+            PhoneNumber: phoneNumber, //phone number to receive the stk push
+            CallBackURL: "https://69e4-102-0-11-18.ngrok-free.app/api/callback",
             AccountReference: accountNumber,
             TransactionDesc: "Mpesa Daraja API stk push test",
           },
@@ -104,21 +88,24 @@ router.post("/api/stkpush", (req, res) => {
           },
         )
         .then((response) => {
-          // res.send("😀 Request is successful done ✔✔. Please enter mpesa pin to complete the transaction");
-          //SEND BACK A JSON RESPONSE TO THE CLIENT
-          console.log(response.data);
-          res.status(200).json({
-            msg: "Request is successful done ✔✔. Please enter mpesa pin to complete the transaction",
-            status: true,
+          //   res.send("😀 Request is successful done ✔✔. Please enter mpesa pin to complete the transaction");
+
+          //send a json data
+          res.json({
+            ResponseCode: "0",
+            ResponseDesc: "Success",
+            CustomerMessage:
+              "Request accepted for processing. Please enter your M-Pesa PIN to complete the transaction.",
           });
         })
         .catch((error) => {
           console.log(error);
           //res.status(500).send("❌ Request failed");
-          console.log(error);
-          res.status(500).json({
-            msg: "Request failed",
-            status: false,
+
+          res.json({
+            ResponseCode: "1",
+            ResponseDesc: "Failed: Error",
+            CustomerMessage: "Request failed. Please try again later.",
           });
         });
     })
@@ -148,14 +135,13 @@ router.post("/api/callback", (req, res) => {
   console.log("PhoneNumber:", phoneNumber);
 
   var json = JSON.stringify(req.body);
-  fs.writeFile("stkcallback.json", json, "utf8", function (err) {
-    if (err) {
-      return console.log(err);
+  fstat.writeFile("stkcallback.json", json, "utf8", function(err){
+    if(err){
+        return console.log(err);
     }
     console.log("STK PUSH CALLBACK STORED SUCCESSFULLY");
-  });
+    
+  })
 });
-
-// Other API routes go here...
 
 module.exports = router;
