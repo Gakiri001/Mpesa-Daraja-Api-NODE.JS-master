@@ -1,6 +1,6 @@
 const express = require("express");
 const moment = require("moment");
-// const { getAccessToken } = require("./app");
+const fs = require("fs");
 const axios = require("axios");
 const router = express.Router();
 
@@ -77,7 +77,7 @@ router.post("/api/stkpush", (req, res) => {
             PartyA: phoneNumber, //phone number to receive the stk push
             PartyB: "174379",
             PhoneNumber: phoneNumber, //phone number to receive the stk push
-            CallBackURL: "https://69e4-102-0-11-18.ngrok-free.app/api/callback",
+            CallBackURL: "https://2888-102-0-11-18.ngrok-free.app/api/callback", //The backend endpoint that M-Pesa will send the transaction result to.
             AccountReference: accountNumber,
             TransactionDesc: "Mpesa Daraja API stk push test",
           },
@@ -113,7 +113,7 @@ router.post("/api/stkpush", (req, res) => {
 });
 
 router.post("/api/callback", (req, res) => {
-  console.log("STK PUSH CALLBACK");
+  console.log("STK PUSH CALLBACK"); //The backend endpoint that M-Pesa will send the transaction result to.
   const merchantRequestID = req.body.Body.stkCallback.MerchantRequestID;
   const checkoutRequestID = req.body.Body.stkCallback.CheckoutRequestID;
   const resultCode = req.body.Body.stkCallback.ResultCode;
@@ -135,13 +135,12 @@ router.post("/api/callback", (req, res) => {
   console.log("PhoneNumber:", phoneNumber);
 
   var json = JSON.stringify(req.body);
-  fstat.writeFile("stkcallback.json", json, "utf8", function(err){
-    if(err){
-        return console.log(err);
+  fs.writeFile("stkcallback.json", json, "utf8", function (err) {
+    if (err) {
+      return console.log(err);
     }
     console.log("STK PUSH CALLBACK STORED SUCCESSFULLY");
-    
-  })
+  });
 });
 
 module.exports = router;
