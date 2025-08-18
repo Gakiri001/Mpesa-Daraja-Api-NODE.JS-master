@@ -77,7 +77,7 @@ router.post("/api/stkpush", (req, res) => {
             PartyA: phoneNumber, //phone number to receive the stk push
             PartyB: "174379",
             PhoneNumber: phoneNumber, //phone number to receive the stk push
-            CallBackURL: "https://2888-102-0-11-18.ngrok-free.app/api/callback", //The backend endpoint that M-Pesa will send the transaction result to.
+            CallBackURL: "https://30bb-102-0-11-18.ngrok-free.app/api/callback", //The backend endpoint that M-Pesa will send the transaction result to.
             AccountReference: accountNumber,
             TransactionDesc: "Mpesa Daraja API stk push test",
           },
